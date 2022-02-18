@@ -13,7 +13,7 @@ wiener w
 
 # Parameter values
 par ip0=0.75
-par gLs=0.1  gLd=0.1  gNa=30  gKdr=15  gCa=9  gKahp=0.8  gKC=15
+par gLs=0.1  gLd=0.1  gNa=30  gKdr=15  gCa=9  gKahp=0.8  par_gKC=15
 par VNa=60  VCa=80  VK=-75  VL=-60  Vsyn=0
 par gc=2.1 pp=0.5  Cm=3
 par alphac=2 betac=0.1
@@ -51,7 +51,7 @@ varnoise=sqrt((alphas*(1 - s)+betas*s)/(taus*natp))
 # Output cols are t, ODEs, AUXs in order, here:
 # t versus vd cad hs ns sd cd qd gqk gkc 
 Vs'=(-gLs*(Vs-VL)-gNa*(Minfs(Vs)^2)*hs*(Vs-VNa)-gKdr*ns*(Vs-VK)-gkatp*natp*poatp*(Vs-VK)+(gc/pp)*(Vd-Vs)+Ip0/pp)/Cm
-Vd'=(-gLd*(Vd-VL)-ICad-gKahp*qd*(Vd-VK)-gKC*cd*chid*(Vd-VK)-gkatp*natp*poatp*(Vd-VK)+(gc*(Vs-Vd))/(1.0-pp))/Cm
+Vd'=(-gLd*(Vd-VL)-ICad-gKahp*qd*(Vd-VK)-par_gKC*cd*chid*(Vd-VK)-gkatp*natp*poatp*(Vd-VK)+(gc*(Vs-Vd))/(1.0-pp))/Cm
 Cad'=  -0.13*ICad-0.075*Cad
 hs'=  alphahs(Vs)-(alphahs(Vs)+betahs(Vs))*hs
 ns'=  alphans(Vs)-(alphans(Vs)+betans(Vs))*ns
@@ -63,9 +63,9 @@ s' = (alphas*(1-s)-betas*s)/taus + noise*w*varnoise
 # auxiliary equationns
 aux Ica=ICad
 aux gkq = gKahp*qd
-aux gkc = gKC*cd*chid
+aux gkc = par_gKC*cd*chid
 aux ikatp = gkatp*natp*poatp*(Vs-VK)
-aux iatp=iatp*s
+aux iatp_s=iatp*s
 
 # For stochastics, CVODE can not be used.
 @ maxstor=1000000, total=1.0e4, bounds=10000, xlo=0, xhi=1.0e4, ylo=-90, yhi=60
